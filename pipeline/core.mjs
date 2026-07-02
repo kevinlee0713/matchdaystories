@@ -240,6 +240,10 @@ export async function runPipeline({ deps, config, ledgerPath }) {
         fingerprint: event.fingerprint,
         titleMinhash: event.titleMinhash,
         sport: event.sportKey,
+        // Source article URLs — the DETERMINISTIC same-event key. Fingerprint/MinHash depend on
+        // (non-deterministic) LLM entity tagging, so the same event can get a new fingerprint each
+        // run and slip past dedup; the source URLs never change, so this is the reliable safety net.
+        sourceUrls: (event.sources ?? []).map((s) => s.url).filter(Boolean),
         koId: pub.koId,
         enId: pub.enId,
         publishedAt: config.now ?? '1970-01-01T00:00:00.000Z',

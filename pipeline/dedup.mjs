@@ -34,6 +34,7 @@ export async function buildPublishedView({ ledgerPath, wp }) {
   const ledger = readLedger(ledgerPath);
   const fps = new Set(ledger.map((r) => r.fingerprint));
   const sigs = ledger.filter((r) => r.titleMinhash).map((r) => r.titleMinhash);
+  const urls = new Set(ledger.flatMap((r) => r.sourceUrls ?? [])); // deterministic same-event key
   let wpError = null;
   if (wp?.listPublishedFingerprints) {
     try {
@@ -44,16 +45,26 @@ export async function buildPublishedView({ ledgerPath, wp }) {
       wpError = e.message;
     }
   }
-  return { fps, sigs, wpError };
+  // WP is the source of truth: also union the source URLs recorded on published posts, so dedup
+  // survives a lost/rebuilt ledger (ephemeral CI) even when the fingerprint changed.
+  if (wp?.listPublishedSourceUrls) {
+    try { for (const u of await wp.listPublishedSourceUrls()) urls.add(u); }
+    catch (e) { wpError = wpError || e.message; }
+  }
+  return { fps, sigs, urls, wpError };
 }
 
 // DEDUP-A: drop events already covered (exact fingerprint OR near-text MinHash match).
 export function dedupAgainstPublished(events, publishedView) {
-  const { fps, sigs } = publishedView;
+  const { fps, sigs, urls } = publishedView;
   const kept = [];
   const dropped = [];
   for (const ev of events) {
     if (fps.has(ev.fingerprint)) { dropped.push({ ev, why: 'fingerprint' }); continue; }
+    // Deterministic same-event catch: any source article already published => duplicate. This is
+    // the safety net for non-deterministic fingerprints (LLM entity tagging varies per run).
+    const evUrls = (ev.sources ?? []).map((s) => s.url).filter(Boolean);
+    if (urls && evUrls.some((u) => urls.has(u))) { dropped.push({ ev, why: 'source-url' }); continue; }
     const near = sigs.some((sig) => minhashSimilarity(ev.titleMinhash, sig) >= NEAR_DUP_SIM);
     if (near) { dropped.push({ ev, why: 'near-text' }); continue; }
     kept.push(ev);
