@@ -1,0 +1,10 @@
+{
+  "sports": [
+    { "key": "football", "ko": "축구", "en": "Football", "category": "축구" },
+    { "key": "baseball", "ko": "야구", "en": "Baseball", "category": "야구" },
+    { "key": "basketball", "ko": "농구", "en": "Basketball", "category": "농구" }
+  ],
+  "minSourcesPerEvent": 2,
+  "dateBucketHours": 24,
+  "maxEventsPerRun": 6
+}

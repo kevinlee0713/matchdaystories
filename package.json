@@ -1,0 +1,27 @@
+{
+  "name": "sports-news-blog",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Daily multi-source sports-news aggregator: discover -> cluster -> dedup -> synthesize -> fact-gate -> plagiarism-gate -> card-news -> publish KO+EN -> Telegram. MVP: blog + Telegram, locally testable with fixtures/mocks.",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "node --test \"test/*.test.mjs\"",
+    "pipeline:dry-run": "node pipeline/dryrun.mjs",
+    "pipeline:run": "node --env-file-if-exists=.env pipeline/run.mjs",
+    "live:check": "node --env-file-if-exists=.env scripts/live-check.mjs",
+    "live:check:send": "node --env-file-if-exists=.env scripts/live-check.mjs --send-card",
+    "preview:telegram": "node --env-file-if-exists=.env scripts/preview-to-telegram.mjs"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.68.0",
+    "sharp": "^0.33.5"
+  },
+  "optionalDependencies": {
+    "node-ssh": "^13.2.0",
+    "robots-parser": "^3.0.1"
+  },
+  "devDependencies": {}
+}

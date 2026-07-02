@@ -1,0 +1,16 @@
+{
+  "_comment": "Real English-language sports RSS feeds (published for syndication). Multiple outlets per sport so the SAME event gets independent multi-source coverage for synthesis. Review each outlet's ToS before commercial use.",
+  "recencyHours": 48,
+  "maxItemsPerFeed": 10,
+  "feeds": [
+    { "sportKey": "football", "outlet": "BBC Sport", "url": "https://feeds.bbci.co.uk/sport/football/rss.xml" },
+    { "sportKey": "football", "outlet": "Sky Sports", "url": "https://www.skysports.com/rss/12040" },
+    { "sportKey": "football", "outlet": "The Guardian", "url": "https://www.theguardian.com/football/rss" },
+    { "sportKey": "football", "outlet": "ESPN", "url": "https://www.espn.com/espn/rss/soccer/news" },
+    { "sportKey": "football", "outlet": "CBS Sports", "url": "https://www.cbssports.com/rss/headlines/soccer/" },
+    { "sportKey": "basketball", "outlet": "ESPN NBA", "url": "https://www.espn.com/espn/rss/nba/news" },
+    { "sportKey": "basketball", "outlet": "CBS Sports", "url": "https://www.cbssports.com/rss/headlines/nba/" },
+    { "sportKey": "baseball", "outlet": "ESPN MLB", "url": "https://www.espn.com/espn/rss/mlb/news" },
+    { "sportKey": "baseball", "outlet": "CBS Sports", "url": "https://www.cbssports.com/rss/headlines/mlb/" }
+  ]
+}

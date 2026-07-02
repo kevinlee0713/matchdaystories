@@ -1,0 +1,59 @@
+name: daily-aggregate
+
+on:
+  schedule:
+    - cron: '0 0 * * *'   # daily 00:00 UTC
+  workflow_dispatch: {}
+
+jobs:
+  aggregate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write   # to commit the dedup ledger back
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install CJK fonts (glyph-smoke needs these on the runner)
+        run: sudo apt-get update && sudo apt-get install -y fonts-noto-cjk
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - run: npm install
+
+      # Pre-flight gate: the E2E dry-run must pass before any live run.
+      - name: Dry-run gate (all 5 ACs)
+        run: npm run pipeline:dry-run
+
+      - name: Live daily run
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          SERPER_API_KEY: ${{ secrets.SERPER_API_KEY }}
+          NEWSAPI_KEY: ${{ secrets.NEWSAPI_KEY }}
+          WP_SSH_HOST: ${{ secrets.WP_SSH_HOST }}
+          WP_SSH_USER: ${{ secrets.WP_SSH_USER }}
+          WP_SSH_PORT: ${{ secrets.WP_SSH_PORT }}
+          WP_SSH_KEY: ${{ secrets.WP_SSH_KEY }}   # inline private-key PEM (no key file on the runner)
+          WP_PATH: ${{ secrets.WP_PATH }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_GROUP_ID: ${{ secrets.TELEGRAM_GROUP_ID }}
+        run: npm run pipeline:run
+
+      # Fail-closed: commit+push the updated dedup ledger so cross-run dedup persists.
+      # A push failure must FAIL the job (a stale ledger risks re-publishing) — never silently
+      # swallow it. Retry once for the benign concurrent-run race before failing.
+      - name: Commit dedup ledger
+        if: always()
+        run: |
+          git config user.name "daily-aggregate"
+          git config user.email "bot@users.noreply.github.com"
+          git add data/fingerprints.ndjson
+          if git diff --cached --quiet; then
+            echo "ledger unchanged"
+            exit 0
+          fi
+          git commit -m "chore: update dedup ledger [skip ci]"
+          git push || (git pull --rebase && git push)
