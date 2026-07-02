@@ -10,7 +10,10 @@
     { "sportKey": "football", "outlet": "CBS Sports", "url": "https://www.cbssports.com/rss/headlines/soccer/" },
     { "sportKey": "basketball", "outlet": "ESPN NBA", "url": "https://www.espn.com/espn/rss/nba/news" },
     { "sportKey": "basketball", "outlet": "CBS Sports", "url": "https://www.cbssports.com/rss/headlines/nba/" },
+    { "sportKey": "basketball", "outlet": "Yahoo NBA", "url": "https://sports.yahoo.com/nba/rss/" },
     { "sportKey": "baseball", "outlet": "ESPN MLB", "url": "https://www.espn.com/espn/rss/mlb/news" },
-    { "sportKey": "baseball", "outlet": "CBS Sports", "url": "https://www.cbssports.com/rss/headlines/mlb/" }
+    { "sportKey": "baseball", "outlet": "CBS Sports", "url": "https://www.cbssports.com/rss/headlines/mlb/" },
+    { "sportKey": "baseball", "outlet": "Yahoo MLB", "url": "https://sports.yahoo.com/mlb/rss/" },
+    { "sportKey": "baseball", "outlet": "MLB.com", "url": "https://www.mlb.com/feeds/news/rss.xml" }
   ]
 }
