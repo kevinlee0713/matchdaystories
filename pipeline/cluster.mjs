@@ -44,6 +44,7 @@ export function clusterEvents(rawItems, { bucketHours = 24 } = {}) {
   const clusters = [];
   for (const item of rawItems) {
     const bucket = dateBucket(item.publishedAt, bucketHours);
+    const region = item.region || 'intl';
     const toks = storyTokens(item);
     const ents = new Set((item.entities ?? []).map(normalizeName).filter((e) => e.length > 1));
     // Join the best matching cluster: same sport+day AND (similar HEADLINE words OR >= 2 shared
@@ -52,7 +53,7 @@ export function clusterEvents(rawItems, { bucketHours = 24 } = {}) {
     // synthesis "not the same event" skip.
     let best = null, bestScore = 0;
     for (const c of clusters) {
-      if (c.sportKey !== item.sportKey || c.dateBucket !== bucket) continue;
+      if (c.sportKey !== item.sportKey || c.dateBucket !== bucket || c.region !== region) continue;
       const sim = jaccardSet(toks, c.repToks);
       let shared = 0;
       for (const e of ents) if (c.entitySet.has(e)) shared++;
@@ -70,6 +71,7 @@ export function clusterEvents(rawItems, { bucketHours = 24 } = {}) {
       clusters.push({
         sportKey: item.sportKey,
         dateBucket: bucket,
+        region,
         repToks: new Set(toks),
         entitySet: new Set(ents),
         entityBag: [...(item.entities ?? [])],
@@ -87,6 +89,7 @@ export function clusterEvents(rawItems, { bucketHours = 24 } = {}) {
       entities,
       eventType: c.eventType,
       dateBucket: c.dateBucket,
+      region: c.region,
       sources: c.sources,
     };
     ev.id = ev.fingerprint = eventFingerprint(ev);

@@ -14,9 +14,11 @@ import { ROOT_DIR } from '../lib/config.mjs';
 export function liveDiscover(env = process.env, llm = null) {
   const cfgPath = path.join(ROOT_DIR, 'config', 'sources.json');
   return {
-    async discover() {
+    async discover({ sports } = {}) {
       const cfg = JSON.parse(fs.readFileSync(cfgPath, 'utf8'));
       const feeds = cfg.feeds ?? [];
+      const known = new Set((sports ?? []).map((s) => s.key));
+      if (!known.size) ['football', 'baseball', 'basketball', 'volleyball'].forEach((k) => known.add(k));
       if (!feeds.length) throw new Error('No feeds in config/sources.json');
       const recencyMs = (cfg.recencyHours ?? 48) * 3600 * 1000;
       const maxPer = cfg.maxItemsPerFeed ?? 25;
@@ -33,7 +35,8 @@ export function liveDiscover(env = process.env, llm = null) {
           .slice(0, maxPer);
         for (const it of recent) {
           raw.push({
-            sportKey: f.sportKey,
+            sportKey: f.sportKey,           // fixed for per-sport feeds; undefined for KR general feeds (auto-classified)
+            region: f.region || 'intl',     // 'kr' = Korean-league feeds, 'intl' = overseas
             outlet: f.outlet,
             url: it.link,
             title: it.title,
@@ -44,14 +47,20 @@ export function liveDiscover(env = process.env, llm = null) {
       });
       if (!raw.length) return [];
 
-      // Tag entities + eventType so cross-outlet same-event items cluster together.
+      // Tag entities + eventType (+ sportKey for auto/KR items) so cross-outlet same-event items
+      // cluster together and general Korean feeds get split into the right sport.
       if (llm?.tagItems) {
         const tags = await llm.tagItems(raw);
-        raw.forEach((it, i) => { it.entities = tags[i]?.entities ?? []; it.eventType = tags[i]?.eventType ?? 'other'; });
+        raw.forEach((it, i) => {
+          it.entities = tags[i]?.entities ?? [];
+          it.eventType = tags[i]?.eventType ?? 'other';
+          if (!it.sportKey) it.sportKey = tags[i]?.sportKey; // classify general-feed items by sport
+        });
       } else {
         raw.forEach((it) => { it.entities = []; it.eventType = 'other'; });
       }
-      return raw;
+      // Drop items whose sport isn't tracked (e.g. swimming / non-sports from general Korean feeds).
+      return raw.filter((it) => known.has(it.sportKey));
     },
   };
 }

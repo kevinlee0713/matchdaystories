@@ -5,6 +5,7 @@
 import { clusterEvents } from './cluster.mjs';
 import { buildPublishedView, dedupAgainstPublished, appendLedger } from './dedup.mjs';
 import { synthesizeEvent, sourceCorpus } from './synthesize.mjs';
+import { selectEvents } from '../lib/select.mjs';
 import { factGate } from './fact_gate.mjs';
 import { plagiarismGate } from './plagiarism_gate.mjs';
 import { layoutMangaPage } from '../lib/img/card_layouts.mjs';
@@ -68,24 +69,15 @@ export async function runPipeline({ deps, config, ledgerPath }) {
   const { kept, dropped } = dedupAgainstPublished(events, publishedView);
   report.droppedDuplicate = dropped.map((d) => ({ fingerprint: d.ev.fingerprint, why: d.why }));
 
-  // Sport-BALANCED selection (bounds cost + avoids one sport filling every slot, e.g. football
-  // during a World Cup). Within each sport rank by coverage (most sources = most newsworthy), then
-  // round-robin across sports. No silent truncation: record how many were deferred.
-  const maxEvents = config.maxEventsPerRun ?? 6;
-  const bySport = new Map();
-  for (const ev of kept) {
-    if (!bySport.has(ev.sportKey)) bySport.set(ev.sportKey, []);
-    bySport.get(ev.sportKey).push(ev);
-  }
-  for (const arr of bySport.values()) arr.sort((a, b) => (b.sources?.length ?? 0) - (a.sources?.length ?? 0));
-  const queues = [...bySport.values()];
-  const selected = [];
-  let qi = 0;
-  while (selected.length < maxEvents && queues.some((q) => q.length)) {
-    const q = queues[qi % queues.length];
-    if (q.length) selected.push(q.shift());
-    qi++;
-  }
+  // Sport-balanced, popularity-weighted selection with a Korean-league floor (see lib/select.mjs):
+  // ~perSport per sport, off-season sports skipped, popular sports overflow into freed slots, and
+  // Korean-league (region:'kr') events guaranteed a floor. No silent truncation: record deferred.
+  const maxEvents = config.maxEventsPerRun ?? 12;
+  const selected = selectEvents(kept, {
+    perSport: config.perSportPerRun ?? 3,
+    maxEvents,
+    koreanFloor: config.koreanFloor ?? 2,
+  });
   report.deferredByCap = Math.max(0, kept.length - selected.length);
   if (report.deferredByCap) await alert(`event cap ${maxEvents}: ${report.deferredByCap} lower-coverage event(s) deferred to a later run`);
 

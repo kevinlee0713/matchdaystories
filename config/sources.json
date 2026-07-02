@@ -1,9 +1,9 @@
 {
-  "_comment": "Real English-language sports RSS feeds (published for syndication). Multiple outlets per sport so the SAME event gets independent multi-source coverage for synthesis. Review each outlet's ToS before commercial use.",
+  "_comment": "Sports RSS feeds. 'region':'intl' = overseas (per-sport feeds, English). 'region':'kr' = Korean-league general feeds (mixed sports, no fixed sportKey → each item is auto-classified into a sport by the LLM tagger; non-target items are dropped). Multiple outlets per region/sport so the SAME event gets multi-source coverage. Review each outlet's ToS before commercial use.",
   "recencyHours": 48,
   "maxItemsPerFeed": 10,
   "feeds": [
-    { "sportKey": "football", "outlet": "BBC Sport", "url": "https://feeds.bbci.co.uk/sport/football/rss.xml" },
+    { "sportKey": "football", "region": "intl", "outlet": "BBC Sport", "url": "https://feeds.bbci.co.uk/sport/football/rss.xml" },
     { "sportKey": "football", "outlet": "Sky Sports", "url": "https://www.skysports.com/rss/12040" },
     { "sportKey": "football", "outlet": "The Guardian", "url": "https://www.theguardian.com/football/rss" },
     { "sportKey": "football", "outlet": "ESPN", "url": "https://www.espn.com/espn/rss/soccer/news" },
@@ -13,7 +13,11 @@
     { "sportKey": "basketball", "outlet": "Yahoo NBA", "url": "https://sports.yahoo.com/nba/rss/" },
     { "sportKey": "baseball", "outlet": "ESPN MLB", "url": "https://www.espn.com/espn/rss/mlb/news" },
     { "sportKey": "baseball", "outlet": "CBS Sports", "url": "https://www.cbssports.com/rss/headlines/mlb/" },
-    { "sportKey": "baseball", "outlet": "Yahoo MLB", "url": "https://sports.yahoo.com/mlb/rss/" },
-    { "sportKey": "baseball", "outlet": "MLB.com", "url": "https://www.mlb.com/feeds/news/rss.xml" }
+    { "sportKey": "baseball", "region": "intl", "outlet": "Yahoo MLB", "url": "https://sports.yahoo.com/mlb/rss/" },
+    { "sportKey": "baseball", "region": "intl", "outlet": "MLB.com", "url": "https://www.mlb.com/feeds/news/rss.xml" },
+
+    { "region": "kr", "outlet": "연합뉴스", "url": "https://www.yna.co.kr/rss/sports.xml" },
+    { "region": "kr", "outlet": "한겨레", "url": "https://www.hani.co.kr/rss/sports/" },
+    { "region": "kr", "outlet": "OSEN", "url": "https://rss.donga.com/sports.xml" }
   ]
 }
