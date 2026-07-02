@@ -41,6 +41,7 @@ jobs:
           WP_PATH: ${{ secrets.WP_PATH }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_GROUP_ID: ${{ secrets.TELEGRAM_GROUP_ID }}
+          TELEGRAM_ALERT_CHAT_ID: ${{ secrets.TELEGRAM_ALERT_CHAT_ID }}   # ops alerts -> operator DM
         run: npm run pipeline:run
 
       # Fail-closed: commit+push the updated dedup ledger so cross-run dedup persists.
