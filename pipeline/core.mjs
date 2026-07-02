@@ -69,6 +69,14 @@ export async function runPipeline({ deps, config, ledgerPath }) {
   const { kept, dropped } = dedupAgainstPublished(events, publishedView);
   report.droppedDuplicate = dropped.map((d) => ({ fingerprint: d.ev.fingerprint, why: d.why }));
 
+  // Semantic same-event dedup. Entity tagging is non-deterministic (the same event gets different
+  // entity names each run/cluster) and heavy paraphrase defeats lexical similarity, so URL/finger-
+  // print/MinHash dedup can miss a heavily-covered event that splits into different article sets.
+  // An LLM judges whether a synthesized article is the SAME event as any recently-published title
+  // (cross-run) or one published earlier this run (same-event split into 2 clusters).
+  const publishedTitles = publishedView.recentTitles ?? [];
+  const runTitles = [];
+
   // Sport-balanced, popularity-weighted selection with a Korean-league floor (see lib/select.mjs):
   // ~perSport per sport, off-season sports skipped, popular sports overflow into freed slots, and
   // Korean-league (region:'kr') events guaranteed a floor. No silent truncation: record deferred.
@@ -109,6 +117,20 @@ export async function runPipeline({ deps, config, ledgerPath }) {
     }
     const article = synth.article;
     const corpus = sourceCorpus(event);
+
+    // Semantic same-event dedup (LLM). Fail-OPEN: a dedup error must never block publishing.
+    const candidates = [...publishedTitles, ...runTitles];
+    if (candidates.length && llm.isDuplicateEvent) {
+      let dup = false;
+      try { dup = !!(await llm.isDuplicateEvent({ title: article.titleKo, candidates })).duplicate; }
+      catch { dup = false; }
+      if (dup) {
+        report.droppedDuplicate.push({ fingerprint: event.fingerprint, why: 'same-event(llm)' });
+        await alert(`event ${event.fingerprint} dropped — same event as an already-published issue: "${article.titleKo}"`);
+        continue;
+      }
+    }
+    runTitles.push(article.titleKo);
 
     // 5b) Advisory judges (cannot block; if panel can't run at all -> fail-closed)
     let judgeResult;
@@ -249,6 +271,7 @@ export async function runPipeline({ deps, config, ledgerPath }) {
         // (non-deterministic) LLM entity tagging, so the same event can get a new fingerprint each
         // run and slip past dedup; the source URLs never change, so this is the reliable safety net.
         sourceUrls: (event.sources ?? []).map((s) => s.url).filter(Boolean),
+        titleKo: article.titleKo, // for semantic same-event dedup against future runs
         koId: pub.koId,
         enId: pub.enId,
         publishedAt: config.now ?? '1970-01-01T00:00:00.000Z',

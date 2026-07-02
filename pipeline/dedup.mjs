@@ -35,6 +35,7 @@ export async function buildPublishedView({ ledgerPath, wp }) {
   const fps = new Set(ledger.map((r) => r.fingerprint));
   const sigs = ledger.filter((r) => r.titleMinhash).map((r) => r.titleMinhash);
   const urls = new Set(ledger.flatMap((r) => r.sourceUrls ?? [])); // deterministic same-event key
+  const recentTitles = ledger.map((r) => r.titleKo).filter(Boolean); // for semantic same-event dedup
   let wpError = null;
   if (wp?.listPublishedFingerprints) {
     try {
@@ -51,7 +52,11 @@ export async function buildPublishedView({ ledgerPath, wp }) {
     try { for (const u of await wp.listPublishedSourceUrls()) urls.add(u); }
     catch (e) { wpError = wpError || e.message; }
   }
-  return { fps, sigs, urls, wpError };
+  if (wp?.listPublishedTitles) {
+    try { for (const t of await wp.listPublishedTitles()) if (t) recentTitles.push(t); }
+    catch (e) { wpError = wpError || e.message; }
+  }
+  return { fps, sigs, urls, recentTitles, wpError };
 }
 
 // DEDUP-A: drop events already covered (exact fingerprint OR near-text MinHash match).
