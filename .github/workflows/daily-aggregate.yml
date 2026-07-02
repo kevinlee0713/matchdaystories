@@ -2,7 +2,8 @@ name: daily-aggregate
 
 on:
   schedule:
-    - cron: '0 0 * * *'   # daily 00:00 UTC
+    - cron: '0 0 * * *'    # 09:00 KST (morning)
+    - cron: '0 12 * * *'   # 21:00 KST (evening)
   workflow_dispatch: {}
 
 jobs:
