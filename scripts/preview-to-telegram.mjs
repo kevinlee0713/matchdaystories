@@ -8,9 +8,13 @@ import path from 'node:path';
 import { runPipeline } from '../pipeline/core.mjs';
 import { buildDeps } from '../pipeline/deps.mjs';
 import { loadConfig } from '../lib/config.mjs';
+import { mockWordPress } from '../lib/wp/post.mjs';
 
 const config = { ...loadConfig(process.env), now: new Date().toISOString() };
 const { mode, news } = buildDeps(process.env);
+// Preview contract: never touch the live blog, even when WP creds exist in .env.
+news.wp = mockWordPress();
+mode.wp = 'mock(preview)';
 console.log('Adapter modes:', JSON.stringify(mode));
 if (mode.telegram !== 'live') {
   console.error('Telegram not live — set TELEGRAM_BOT_TOKEN + TELEGRAM_GROUP_ID'); process.exit(1);
