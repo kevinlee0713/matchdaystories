@@ -8,7 +8,7 @@ import { synthesizeEvent, sourceCorpus } from './synthesize.mjs';
 import { selectEvents } from '../lib/select.mjs';
 import { factGate } from './fact_gate.mjs';
 import { plagiarismGate } from './plagiarism_gate.mjs';
-import { layoutMangaPage } from '../lib/img/card_layouts.mjs';
+import { renderFourCutCard } from '../lib/img/fourcut.mjs';
 import { mockCardImage } from '../lib/img/card_image.mjs';
 import { glyphSmoke } from '../lib/img/glyph_smoke.mjs';
 
@@ -197,54 +197,53 @@ export async function runPipeline({ deps, config, ledgerPath }) {
     }
     if (rejected) continue;
 
-    // 5e) Render the MANGA-PAGE card. The wordless 2-cut (2컷) manga page is language-neutral, so
-    // generate it ONCE per issue (only after the gates pass — no art spent on blocked issues), then
-    // composite the KO + EN headline/summary text onto it. Fail-soft: any render failure blocks
-    // publish (never ship a broken/half image to Telegram — AC#3).
-    let pageBuffer;
+    // 5e) Render the 4-CUT STORY card (Instagram 1080x1350). Generate the wordless 2x2 manga art +
+    // 4 Korean bubble dialogues ONCE per issue (only after the gates pass — no art on blocked
+    // issues); WE overlay the correct Korean bubbles + a manga-title headline. Card-news is KO-only
+    // (blog/WP still publishes KO+EN). Fail-soft: any render failure blocks publish (AC#3).
+    let fourCut;
     try {
-      pageBuffer = await cardImage.page({ article, event });
+      fourCut = await cardImage.fourCut({ article, event });
     } catch (e) {
       report.cardIssues.push({ fingerprint: event.fingerprint, stage: 'image', reason: e.message });
-      await alert(`issue ${event.fingerprint} manga image generation failed: ${e.message}`);
+      await alert(`issue ${event.fingerprint} manga art generation failed: ${e.message}`);
       continue;
     }
 
-    // Card-news is KO-only (the blog/WP still publishes KO+EN articles; only the Telegram card is
-    // Korean). The wordless manga page is shared regardless.
     const cards = [];
     let cardOk = true;
-    for (const lang of ['ko']) {
-      // Manga-card text: punchy headline + a longer key-content summary. Fail-soft -> article title.
+    {
+      const lang = 'ko';
       let text;
       try { text = await llm.comicCard({ article, lang }); }
-      catch { text = { headline: lang === 'ko' ? article.titleKo : article.titleEn, summary: (lang === 'ko' ? article.bodyKo : article.bodyEn) || '' }; }
+      catch { text = { headline: article.titleKo || article.titleEn }; }
+      const headline = text.headline || article.titleKo || article.titleEn;
 
       let card;
       try {
-        card = await layoutMangaPage({
-          pageBuffer, headline: text.headline, summary: text.summary,
-          date: cardDate, sportLabel: sportLabel(article.sport), accent: cardAccent,
+        card = await renderFourCutCard({
+          sportKey: article.sport, sportLabel: sportLabel(article.sport), date: cardDate,
+          headline, mangaBuffer: fourCut.art, dialogues: fourCut.dialogues, accent: cardAccent,
         });
       } catch (e) {
         cardOk = false;
         report.cardIssues.push({ fingerprint: event.fingerprint, stage: 'render', lang, reason: e.message });
-        await alert(`issue ${event.fingerprint} card render failed (${lang}): ${e.message}`);
-        break;
+        await alert(`issue ${event.fingerprint} card render failed: ${e.message}`);
       }
-      if (card.format !== 'png' || card.width !== 1080 || card.height !== 1080) {
+      if (cardOk && (card.format !== 'png' || card.width !== 1080 || card.height !== 1350)) {
         cardOk = false;
         report.cardIssues.push({ fingerprint: event.fingerprint, stage: 'render', lang, reason: 'invalid PNG dims' });
-        break;
       }
-      const smoke = await glyphSmoke(text.headline);
-      if (!smoke.ok) {
-        cardOk = false;
-        report.cardIssues.push({ fingerprint: event.fingerprint, stage: 'glyph', lang, reason: smoke.reason });
-        await alert(`issue ${event.fingerprint} glyph-smoke failed (${lang}): ${smoke.reason}`);
-        break;
+      if (cardOk) {
+        const smoke = await glyphSmoke(headline);
+        if (!smoke.ok) {
+          cardOk = false;
+          report.cardIssues.push({ fingerprint: event.fingerprint, stage: 'glyph', lang, reason: smoke.reason });
+          await alert(`issue ${event.fingerprint} glyph-smoke failed: ${smoke.reason}`);
+        } else {
+          cards.push({ lang, buffer: card.buffer, caption: headline });
+        }
       }
-      cards.push({ lang, buffer: card.buffer, caption: text.headline });
     }
     if (!cardOk) continue; // no broken images to Telegram (AC#3)
 
