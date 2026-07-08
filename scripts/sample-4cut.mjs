@@ -1,6 +1,6 @@
-// Sample: 4-cut story manga card (Instagram 1080x1350) with Korean speech bubbles + manga-title.
+// Sample: 4-cut story card (B: AI-drawn bubbles + Korean overlay via detection).
 import { mkdirSync, writeFileSync } from 'node:fs';
-import { deriveFourBeats, fourCutPrompt, renderFourCutCard } from '../lib/img/fourcut.mjs';
+import { deriveFourBeats, fourCutPrompt, detectBubbles, renderFourCutCard } from '../lib/img/fourcut.mjs';
 import { generateComicImage } from '../lib/img/comic_card.mjs';
 
 mkdirSync('out/4cut', { recursive: true });
@@ -12,16 +12,20 @@ const article = {
 
 console.log('1) deriving 4-beat story…');
 const beats = await deriveFourBeats(article);
-beats.forEach((b, i) => console.log(`  컷${i + 1}: "${b.dialogue}" — ${b.scene.slice(0, 60)}`));
+beats.forEach((b, i) => console.log(`  컷${i + 1}: "${b.dialogue}" — ${b.scene.slice(0, 55)}`));
 
-console.log('2) generating 4-panel art (no text)…');
+console.log('2) generating 4-panel art WITH AI bubbles…');
 const { buffer: art, source } = await generateComicImage(fourCutPrompt(beats), process.env, { aspectRatio: '1:1' });
 console.log('  art:', source);
 
-console.log('3) composing card…');
+console.log('3) detecting bubbles…');
+const bubbles = await detectBubbles(art);
+console.log('  bubbles:', bubbles.length);
+
+console.log('4) composing card…');
 const card = await renderFourCutCard({
   sportKey: article.sportKey, date: article.date, headline: article.headline,
-  mangaBuffer: art, dialogues: beats.map((b) => b.dialogue),
+  mangaBuffer: art, bubbles, dialogues: beats.map((b) => b.dialogue),
 });
 writeFileSync('out/4cut/sample-4cut-card.png', card.buffer);
 console.log(`  ✅ out/4cut/sample-4cut-card.png  ${card.width}x${card.height}`);

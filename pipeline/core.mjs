@@ -222,8 +222,8 @@ export async function runPipeline({ deps, config, ledgerPath }) {
       let card;
       try {
         card = await renderFourCutCard({
-          sportKey: article.sport, sportLabel: sportLabel(article.sport), date: cardDate,
-          headline, mangaBuffer: fourCut.art, dialogues: fourCut.dialogues, accent: cardAccent,
+          sportKey: article.sport, date: cardDate, headline,
+          mangaBuffer: fourCut.art, bubbles: fourCut.bubbles, dialogues: fourCut.dialogues, accent: cardAccent,
         });
       } catch (e) {
         cardOk = false;
