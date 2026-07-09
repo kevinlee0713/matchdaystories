@@ -6,11 +6,11 @@ import { renderFourCutCard } from '../lib/img/fourcut.mjs';
 import { mockCardImage } from '../lib/img/card_image.mjs';
 import { glyphSmoke } from '../lib/img/glyph_smoke.mjs';
 
-test('4-cut card renders a valid 1080x1350 PNG from (placeholder) art + Korean bubbles', async () => {
-  const { art, dialogues } = await mockCardImage().fourCut();
+test('4-cut card renders a valid 1080x1350 PNG from (placeholder) wordless art', async () => {
+  const { art } = await mockCardImage().fourCut();
   const card = await renderFourCutCard({
-    sportKey: 'football', sportLabel: '축구', date: '2026.07.06',
-    headline: '캐나다, 월드컵 첫 16강 진출', mangaBuffer: art, dialogues, accent: '#E4002B',
+    sportKey: 'football', date: '2026.07.06',
+    headline: '캐나다, 월드컵 첫 16강 진출', mangaBuffer: art, accent: '#E4002B',
   });
   assert.equal(card.format, 'png');
   assert.equal(card.width, 1080);

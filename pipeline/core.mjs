@@ -77,16 +77,27 @@ export async function runPipeline({ deps, config, ledgerPath }) {
   const publishedTitles = publishedView.recentTitles ?? [];
   const runTitles = [];
 
+  // Only MULTI-SOURCE events can be synthesized (>= minSources distinct outlets). Filter them out
+  // BEFORE selection so single-outlet events don't waste slots (they'd be dropped as ineligible) and
+  // the Korean floor can't pull single-source KR items. Single-source events are reported ineligible
+  // (non-silent) with one consolidated alert.
+  const distinctOutlets = (ev) => new Set((ev.sources ?? []).map((s) => (s.outlet || '').toLowerCase()).filter(Boolean)).size;
+  const eligible = [];
+  const singleSource = [];
+  for (const ev of kept) (distinctOutlets(ev) >= minSources ? eligible : singleSource).push(ev);
+  for (const ev of singleSource) report.ineligible.push({ fingerprint: ev.fingerprint, reason: `only ${distinctOutlets(ev)} distinct outlet(s) (< ${minSources})` });
+  if (singleSource.length) await alert(`${singleSource.length} event(s) dropped — single outlet (< ${minSources} sources)`);
+
   // Sport-balanced, popularity-weighted selection with a Korean-league floor (see lib/select.mjs):
   // ~perSport per sport, off-season sports skipped, popular sports overflow into freed slots, and
   // Korean-league (region:'kr') events guaranteed a floor. No silent truncation: record deferred.
   const maxEvents = config.maxEventsPerRun ?? 12;
-  const selected = selectEvents(kept, {
+  const selected = selectEvents(eligible, {
     perSport: config.perSportPerRun ?? 3,
     maxEvents,
     koreanFloor: config.koreanFloor ?? 2,
   });
-  report.deferredByCap = Math.max(0, kept.length - selected.length);
+  report.deferredByCap = Math.max(0, eligible.length - selected.length);
   if (report.deferredByCap) await alert(`event cap ${maxEvents}: ${report.deferredByCap} lower-coverage event(s) deferred to a later run`);
 
   // 5) Per surviving event
@@ -223,7 +234,7 @@ export async function runPipeline({ deps, config, ledgerPath }) {
       try {
         card = await renderFourCutCard({
           sportKey: article.sport, date: cardDate, headline,
-          mangaBuffer: fourCut.art, bubbles: fourCut.bubbles, dialogues: fourCut.dialogues, accent: cardAccent,
+          mangaBuffer: fourCut.art, accent: cardAccent,
         });
       } catch (e) {
         cardOk = false;
