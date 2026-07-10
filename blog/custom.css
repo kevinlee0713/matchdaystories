@@ -1,0 +1,91 @@
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700;1,900&family=UnifrakturMaguntia&family=Noto+Serif+KR:wght@500;700;900&display=swap");
+
+/* ===== Warm greige newsprint paper ===== */
+body.wp-theme-colormag{
+  background-color:#d2ccc1;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+  color:#1d1d1b;
+}
+#page,#content,.site,.cm-main-row,.cm-container,.cm-header-builder,.cm-header-top-row,.cm-header-main-row,.cm-header-bottom-row,.cm-header-center-col,.cm-header-left-col,.cm-header-right-col,.cm-site-branding,.cm-article,article.post,.hentry,.cm-posts,.cm-content-area,.content-area{background:transparent !important;box-shadow:none !important;}
+body,p,.cm-entry-content{color:#1d1d1b;}
+
+/* ===== Top bar ===== */
+.mds-topbar{display:flex;justify-content:space-between;align-items:center;width:100%;max-width:1180px;margin:0 auto;padding:9px 22px;font-family:"Playfair Display",serif;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#6b665f;border-bottom:1px solid rgba(29,29,27,.25);}
+
+/* ===== Header: force FULL WIDTH + centered (fix narrow-column wrap) ===== */
+.cm-header-main-row{display:block !important;text-align:center !important;border-top:1px solid #1d1d1b !important;border-bottom:1px solid #1d1d1b !important;padding:14px 0 !important;}
+.cm-header-main-row .cm-header-left-col,.cm-header-main-row .cm-header-right-col{display:none !important;}
+.cm-header-center-col{width:100% !important;max-width:100% !important;flex:0 0 100% !important;float:none !important;margin:0 auto !important;display:block !important;text-align:center !important;}
+.cm-site-branding{width:100% !important;text-align:center !important;float:none !important;}
+.cm-site-title{text-align:center !important;}
+.cm-site-title a{font-family:"UnifrakturMaguntia",serif !important;font-weight:400 !important;color:#1d1d1b !important;font-size:42px;letter-spacing:1px;white-space:nowrap;}
+.cm-site-description{font-family:"Playfair Display",serif;text-transform:uppercase;letter-spacing:5px;font-size:11px;color:#6b665f;margin-top:6px;}
+@media(max-width:600px){.cm-site-title a{font-size:26px;white-space:normal;}}
+
+/* ===== Giant nameplate band (fixed size, full width, one line) ===== */
+.mds-nameplate{width:100% !important;max-width:100% !important;margin:26px 0 !important;padding:6px 3% !important;background:#1d1d1b !important;text-align:center;overflow:hidden;box-sizing:border-box;}
+.mds-nameplate span{display:block;font-family:"Playfair Display",serif;font-weight:900;color:#d2ccc1;font-size:clamp(42px,8.2vw,118px);line-height:1;letter-spacing:-2px;white-space:nowrap;}
+
+/* ===== Category bar: full-width newspaper section rule ===== */
+.cm-primary-nav{width:100% !important;background:transparent !important;border-top:1px solid #1d1d1b !important;border-bottom:3px double #1d1d1b !important;box-shadow:none !important;}
+.cm-header-bottom-row{border:none !important;box-shadow:none !important;width:100% !important;}
+#cm-primary-menu{display:flex !important;flex-wrap:wrap;justify-content:center !important;width:100% !important;max-width:1140px;margin:0 auto !important;padding:0 !important;list-style:none;}
+#cm-primary-menu > li{list-style:none;float:none !important;}
+#cm-primary-menu > li > a{display:block;color:#1d1d1b;font-family:"Playfair Display",serif;font-weight:700;font-size:16px;letter-spacing:3px;text-transform:uppercase;padding:12px 30px;border-left:1px solid rgba(29,29,27,.22);text-decoration:none;}
+#cm-primary-menu > li:last-child > a{border-right:1px solid rgba(29,29,27,.22);}
+#cm-primary-menu > li > a:hover{color:#d0451f;background:transparent;}
+
+/* ===== Articles ===== */
+.cm-posts.col-2{gap:46px;}
+.cm-article,article.post{border-bottom:1px solid rgba(29,29,27,.28) !important;padding-bottom:28px;}
+.cm-entry-title,.cm-entry-title a{font-family:"Playfair Display","Noto Serif KR",serif !important;font-weight:900 !important;color:#1d1d1b !important;line-height:1.22;letter-spacing:-.3px;}
+.cm-entry-summary,.cm-entry-summary p,.cm-entry-summary a{color:#332f29 !important;font-size:15px;line-height:1.75;font-family:"Noto Serif KR",serif;}
+.cm-entry-header-meta{text-transform:uppercase;letter-spacing:1.5px;font-size:12px;color:#6b665f;font-family:"Playfair Display",serif;}
+/* pill button like the reference "ALL WORK" */
+.cm-entry-button .cm-button,.cm-entry-button a{display:inline-block;background:transparent !important;color:#1d1d1b !important;padding:8px 24px !important;border:1.5px solid #1d1d1b !important;border-radius:40px !important;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;box-shadow:none !important;font-family:"Playfair Display",serif;text-decoration:none !important;transition:all .15s;}
+.cm-entry-button .cm-button:hover,.cm-entry-button a:hover{background:#1d1d1b !important;color:#d2ccc1 !important;}
+.cm-entry-header-meta a[href*="category"]{background:#d0451f;color:#fff !important;padding:2px 9px;font-weight:700;letter-spacing:1px;border-radius:2px;}
+/* newspaper drop cap on the first paragraph of each summary */
+.cm-entry-summary > p:first-of-type::first-letter{float:left;font-family:"Playfair Display",serif;font-weight:900;font-size:3.2em;line-height:.72;padding:6px 10px 0 0;color:#1d1d1b;}
+
+/* ===== Thumbnail: manga + title only, ink frame ===== */
+.cm-featured-image{height:auto !important;overflow:hidden !important;border:1px solid #1d1d1b;}
+.cm-featured-image img.wp-post-image,img.wp-post-image{width:100% !important;height:auto !important;aspect-ratio:3/2;object-fit:cover;object-position:top;display:block;}
+
+/* ============================================================
+   FIX 2026-07-10 — horizontal category menu + full-card thumb
+   ============================================================ */
+/* Un-confine the category menu: ColorMag nests it in a narrow bottom-row
+   left column, so the flex menu collapses to 1 char/line. Force the whole
+   bottom-row chain full width and center the menu. */
+.cm-header-bottom-row .cm-container,
+.cm-header-bottom-row .cm-bottom-row{display:block !important;width:100% !important;max-width:100% !important;}
+.cm-header-bottom-row .cm-bottom-row .cm-header-left-col,
+.cm-header-bottom-row .cm-bottom-row .cm-header-center-col,
+.cm-header-bottom-row .cm-bottom-row .cm-header-right-col{display:block !important;width:100% !important;max-width:100% !important;flex:0 0 100% !important;float:none !important;text-align:center !important;}
+#cm-primary-nav,.cm-primary-nav{width:100% !important;float:none !important;}
+#cm-primary-menu{display:flex !important;flex-wrap:wrap !important;justify-content:center !important;width:100% !important;max-width:1140px !important;margin:0 auto !important;}
+#cm-primary-menu>li{float:none !important;width:auto !important;}
+#cm-primary-menu>li>a{white-space:nowrap !important;}
+
+/* Featured thumbnail: show the WHOLE 4-cut card (1080x1350 = 4/5), not a top 3:2 crop */
+.cm-featured-image{border:1px solid #1d1d1b;}
+.cm-featured-image img.wp-post-image,img.wp-post-image{aspect-ratio:4/5 !important;object-fit:cover !important;object-position:center !important;}
+
+/* Trim excess empty masthead height */
+.cm-header-main-row{padding:4px 0 !important;}
+.mds-nameplate{margin:14px 0 !important;}
+
+/* ============================================================
+   FIX2 2026-07-10 — masthead order + kill empty branding band
+   Header DOM order was: topbar, [empty main-row], menu, nameplate.
+   Make the masthead a flex column and reorder to the newspaper
+   standard: topbar -> MATCHDAY nameplate -> category menu.
+   ============================================================ */
+#cm-masthead{display:flex !important;flex-direction:column !important;}
+#cm-masthead > *{order:2;}
+#cm-masthead > .mds-topbar{order:0 !important;}
+#cm-masthead > .mds-nameplate{order:1 !important;margin:12px 0 4px !important;}
+/* the empty branding row (site title is intentionally hidden) just leaves a big void */
+.cm-header-main-row{display:none !important;}
+
