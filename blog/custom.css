@@ -89,3 +89,14 @@ body,p,.cm-entry-content{color:#1d1d1b;}
 /* the empty branding row (site title is intentionally hidden) just leaves a big void */
 .cm-header-main-row{display:none !important;}
 
+/* ============================================================
+   FIX3 2026-07-10 — stop ColorMag clipping the stacked masthead
+   #cm-masthead has a fixed height; as a flex column the topbar +
+   MATCHDAY nameplate overflow it and get clipped (only the menu
+   row shows). Let it grow and not clip.
+   ============================================================ */
+#cm-masthead{height:auto !important;min-height:0 !important;max-height:none !important;overflow:visible !important;}
+#cm-masthead .cm-row,#cm-masthead .cm-main-header{height:auto !important;min-height:0 !important;overflow:visible !important;}
+.mds-nameplate{display:block !important;visibility:visible !important;opacity:1 !important;height:auto !important;overflow:visible !important;}
+.mds-topbar{display:flex !important;visibility:visible !important;height:auto !important;}
+
