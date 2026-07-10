@@ -8,6 +8,6 @@
   "minSourcesPerEvent": 2,
   "dateBucketHours": 24,
   "perSportPerRun": 3,
-  "koreanFloor": 2,
+  "koreanFloor": 6,
   "maxEventsPerRun": 12
 }

@@ -18,6 +18,10 @@
 
     { "region": "kr", "outlet": "연합뉴스", "url": "https://www.yna.co.kr/rss/sports.xml" },
     { "region": "kr", "outlet": "한겨레", "url": "https://www.hani.co.kr/rss/sports/" },
-    { "region": "kr", "outlet": "OSEN", "url": "https://rss.donga.com/sports.xml" }
+    { "region": "kr", "outlet": "스포츠동아", "url": "https://rss.donga.com/sports.xml" },
+    { "region": "kr", "outlet": "한국경제", "url": "https://www.hankyung.com/feed/sports" },
+    { "region": "kr", "outlet": "MBN", "url": "https://www.mbn.co.kr/rss/sports/" },
+    { "region": "kr", "outlet": "SPOTV", "url": "https://www.spotvnews.co.kr/rss/allArticle.xml" },
+    { "region": "kr", "outlet": "일간스포츠", "url": "https://isplus.com/rss" }
   ]
 }
