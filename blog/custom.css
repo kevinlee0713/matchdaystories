@@ -141,3 +141,37 @@ body.wp-theme-colormag{
   background-attachment:fixed,scroll !important;
 }
 
+/* ============================================================
+   FIX7 2026-07-10 — VISIBLE paper grain (opaque noise overlay)
+   Previous attempts washed out (multiply + semi-transparent
+   turbulence). Flatten the noise alpha (feFuncA=1) to an opaque
+   grayscale grain, then overlay at low opacity so it's clearly a
+   paper tooth, plus a soft low-frequency cloud for fiber mottle.
+   ============================================================ */
+body.wp-theme-colormag{
+  background-color:#dcd5c6 !important;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Cfilter id='c'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.018' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='discrete' tableValues='1'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23c)' opacity='0.13'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='discrete' tableValues='1'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.16'/%3E%3C/svg%3E") !important;
+  background-repeat:repeat,repeat !important;
+  background-size:600px 600px,200px 200px !important;
+  background-blend-mode:normal !important;
+  background-attachment:scroll !important;
+}
+
+/* ============================================================
+   FIX8 2026-07-10 — make the paper grain actually visible
+   The noise renders fine but opacity 0.16 gave only ~2 levels of
+   variation (invisible). Raise to ~0.42 grain / ~0.30 cloud so the
+   tooth is clearly felt (~6-8 levels) without looking dirty.
+   ============================================================ */
+body.wp-theme-colormag{
+  background-color:#dcd5c6 !important;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Cfilter id='c'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.018' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='discrete' tableValues='1'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23c)' opacity='0.30'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='discrete' tableValues='1'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.42'/%3E%3C/svg%3E") !important;
+  background-repeat:repeat,repeat !important;
+  background-size:600px 600px,220px 220px !important;
+  background-blend-mode:normal,normal !important;
+}
+
