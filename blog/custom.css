@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700;1,900&family=UnifrakturMaguntia&family=Noto+Serif+KR:wght@500;700;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,900;1,9..144,600&family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700;1,900&family=UnifrakturMaguntia&family=Noto+Serif+KR:wght@500;700;900&display=swap");
 
 /* ===== Warm greige newsprint paper ===== */
 body.wp-theme-colormag{
@@ -318,3 +318,9 @@ body.wp-theme-colormag{background-color:#c4bcb3 !important;}
 #cm-primary-menu>li.current_page_item>a,
 #cm-primary-menu>li.current-menu-parent>a{border:0 !important;box-shadow:none !important;outline:0 !important;background:#b3aa9c !important;color:#1b1b19 !important;}
 
+
+/* ===== FIX20 2026-07-10 — reference-style display serif (Fraunces) ===== */
+.cm-entry-title,.cm-entry-title a,.mds-masthead a,.mds-nameplate span{
+  font-family:"Fraunces","Playfair Display","Noto Serif KR",serif !important;
+  font-optical-sizing:auto !important;
+}

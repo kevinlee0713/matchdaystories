@@ -12,7 +12,7 @@ add_action( 'wp_body_open', function () {
 		. '<span>Seoul, KR</span><span>' . $date . '</span></div>'
 		. '<div style="text-align:center;padding:10px 3% 0;">'
 		. '<a href="' . $home . '" style="text-decoration:none;display:inline-block;'
-		. 'font-family:\'Playfair Display\',Georgia,serif;font-weight:900;color:#d2ccc1;'
+		. 'font-family:\'Fraunces\',\'Playfair Display\',Georgia,serif;font-optical-sizing:auto;font-weight:900;color:#d2ccc1;'
 		. 'font-size:clamp(30px,7vw,92px);line-height:1;letter-spacing:-1px;white-space:nowrap;">'
 		. 'MATCHDAY STORIES</a></div>'
 		. '</div>';
