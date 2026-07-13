@@ -175,3 +175,18 @@ body.wp-theme-colormag{
   background-blend-mode:normal,normal !important;
 }
 
+/* ============================================================
+   FIX9 2026-07-10 — clean, uniform paper tooth (no blotches)
+   The low-freq cloud layer read as dirty water-stains. Drop it.
+   Keep ONE fine, uniform grain — a soft even paper tooth like
+   the reference, not speckly static or blotchy clouds.
+   ============================================================ */
+body.wp-theme-colormag{
+  background-color:#dcd5c6 !important;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='discrete' tableValues='1'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.28'/%3E%3C/svg%3E") !important;
+  background-repeat:repeat !important;
+  background-size:180px 180px !important;
+  background-blend-mode:normal !important;
+}
+
