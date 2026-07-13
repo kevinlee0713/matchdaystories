@@ -237,3 +237,6 @@ body.wp-theme-colormag{
 /* ===== FIX13 2026-07-10 — nudge paper a touch lighter ===== */
 body.wp-theme-colormag{background-color:#f4efe6 !important;}
 
+/* ===== FIX14 2026-07-10 — match reference warm greige newsprint ===== */
+body.wp-theme-colormag{background-color:#e3dac5 !important;}
+
