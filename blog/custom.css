@@ -190,3 +190,19 @@ body.wp-theme-colormag{
   background-blend-mode:normal !important;
 }
 
+/* ============================================================
+   FIX10 2026-07-10 — natural irregular paper (multi-octave)
+   Single fractalNoise at a MID base frequency with 6 octaves =
+   organic multi-scale fiber (irregular, like real matte paper),
+   no directional streaks, no big water-stain blotches, not the
+   too-regular fine grain. Rendered & picked visually (cand "D").
+   ============================================================ */
+body.wp-theme-colormag{
+  background-color:#dcd5c6 !important;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='500'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.12' numOctaves='6' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='discrete' tableValues='1'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)' opacity='0.28'/%3E%3C/svg%3E") !important;
+  background-repeat:repeat !important;
+  background-size:500px 500px !important;
+  background-blend-mode:normal !important;
+}
+
