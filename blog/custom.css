@@ -278,3 +278,27 @@ body.wp-theme-colormag{background-color:#bcb3a5 !important;}
 #cm-primary-menu>li.current_page_item>a,
 #cm-primary-menu>li.current-menu-parent>a{background:transparent !important;color:#be5028 !important;}
 
+/* ============================================================
+   FIX18 2026-07-10 — revert paper; darker-greige menu hover;
+   ink-ify BLOCK-widget titles (wp-block-heading) + search button.
+   ============================================================ */
+/* (paper) revert to the exact reference color */
+body.wp-theme-colormag{background-color:#c4bcb3 !important;}
+
+/* (menu) hover + active = a slightly DARKER paper tone (not blue/rust), ink text */
+#cm-primary-menu>li>a:hover,
+#cm-primary-menu>li.current-menu-item>a,
+#cm-primary-menu>li.current_page_item>a,
+#cm-primary-menu>li.current-menu-parent>a{background:#b3aa9c !important;color:#1b1b19 !important;}
+
+/* (sidebar) block-widget titles were blue -> ink text + ink underline, no blue box */
+#secondary .wp-block-heading,
+#secondary .widget_block h2,
+#secondary .widget_block h3,
+.widget_block .wp-block-heading{background:transparent !important;color:#1b1b19 !important;border-color:#1b1b19 !important;}
+#secondary .wp-block-heading{border-bottom:2px solid #1b1b19 !important;padding-bottom:5px !important;}
+/* any blue borders/rules in the sidebar -> ink */
+#secondary .widget_block,#secondary .wp-block-group,#secondary hr,#secondary .wp-block-separator{border-color:#1b1b19 !important;background-color:transparent !important;}
+/* block search button (blue) -> ink */
+#secondary .wp-element-button,.wp-block-search__button,.wp-block-search button,#secondary button[type=submit]{background:#1b1b19 !important;color:#efe9dd !important;border-color:#1b1b19 !important;}
+
