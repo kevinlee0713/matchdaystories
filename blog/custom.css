@@ -234,3 +234,6 @@ body.wp-theme-colormag{
   background-blend-mode:normal !important;
 }
 
+/* ===== FIX13 2026-07-10 — nudge paper a touch lighter ===== */
+body.wp-theme-colormag{background-color:#f4efe6 !important;}
+
