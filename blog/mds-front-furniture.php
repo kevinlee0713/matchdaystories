@@ -5,7 +5,7 @@
 add_action( 'wp_body_open', function () {
 	$date = esc_html( date_i18n( 'Y. m. d' ) );
 	$home = esc_url( home_url( '/' ) );
-	echo '<div class="mds-masthead" style="background:#1d1d1b;width:100%;box-sizing:border-box;padding:12px 0 16px;">'
+	echo '<div class="mds-masthead" style="background:#1b1b19;width:100%;box-sizing:border-box;padding:12px 0 16px;">'
 		. '<div style="max-width:1180px;margin:0 auto;padding:0 22px 8px;display:flex;justify-content:space-between;'
 		. 'align-items:center;font-family:\'Playfair Display\',Georgia,serif;font-size:12px;letter-spacing:2px;'
 		. 'text-transform:uppercase;color:#8a857b;border-bottom:1px solid rgba(210,204,193,.22);">'
