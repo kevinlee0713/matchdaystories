@@ -127,3 +127,17 @@ body.wp-theme-colormag{
 /* sidebar widgets sit on the paper too */
 #secondary .widget,.cm-sidebar .widget,.widget{background:transparent !important;}
 
+/* ============================================================
+   FIX6 2026-07-10 — tactile newsprint paper (per reference)
+   Softer cloudy fiber mottle + fine tooth, so the background
+   reads as real matte paper, not a flat fill.
+   ============================================================ */
+body.wp-theme-colormag{
+  background-color:#dcd5c6 !important;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='320'%3E%3Cfilter id='c'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.032' numOctaves='5' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23c)' opacity='0.17'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.06'/%3E%3C/svg%3E") !important;
+  background-blend-mode:multiply,normal !important;
+  background-attachment:fixed,scroll !important;
+}
+
