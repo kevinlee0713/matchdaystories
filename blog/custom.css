@@ -100,3 +100,13 @@ body,p,.cm-entry-content{color:#1d1d1b;}
 .mds-nameplate{display:block !important;visibility:visible !important;opacity:1 !important;height:auto !important;overflow:visible !important;}
 .mds-topbar{display:flex !important;visibility:visible !important;height:auto !important;}
 
+/* ============================================================
+   FIX4 2026-07-10 — compact newspaper category bar (English)
+   Halve the bar height and tighten type to a newspaper stat-row
+   feel: thin horizontal rules, uppercase serif, vertical dividers.
+   ============================================================ */
+.cm-header-bottom-row,.cm-header-bottom-row .cm-container,.cm-bottom-row{padding-top:0 !important;padding-bottom:0 !important;min-height:0 !important;}
+.cm-primary-nav{border-top:1px solid #1d1d1b !important;border-bottom:2px double #1d1d1b !important;padding:0 !important;}
+#cm-primary-menu{padding:0 !important;}
+#cm-primary-menu > li > a{padding:6px 26px !important;font-size:13px !important;font-weight:700 !important;letter-spacing:2.5px !important;line-height:1.35 !important;}
+
