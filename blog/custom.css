@@ -324,3 +324,6 @@ body.wp-theme-colormag{background-color:#c4bcb3 !important;}
   font-family:"Fraunces","Playfair Display","Noto Serif KR",serif !important;
   font-optical-sizing:auto !important;
 }
+
+/* ===== FIX21 2026-07-10 — bolder category menu labels ===== */
+#cm-primary-menu>li>a{font-weight:900 !important;font-size:14px !important;}
