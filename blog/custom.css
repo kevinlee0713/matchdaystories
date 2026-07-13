@@ -253,3 +253,28 @@ body.wp-theme-colormag{
   background-blend-mode:normal !important;
 }
 
+
+/* ============================================================
+   FIX17 2026-07-10 — ink-ify theme accents + newspaper menu +
+   slightly deeper paper.
+   ============================================================ */
+/* (3) deeper paper base */
+body.wp-theme-colormag{background-color:#bcb3a5 !important;}
+
+/* (1) green/blue link accents in sidebar & content -> ink; hover -> rust */
+#secondary a,#secondary a:link,.widget a,.cm-widget a,article a:not(.cm-button):not(.cm-entry-button a),.cm-entry-title a{color:#1b1b19 !important;}
+#secondary a:hover,.widget a:hover,.cm-entry-title a:hover,article a:hover{color:#be5028 !important;}
+/* widget titles (blue) -> ink */
+.widget-title,#secondary .widget-title,.cm-widget-title{color:#1b1b19 !important;}
+.widget-title:before,.widget-title:after,#secondary .widget-title:before,#secondary .widget-title:after{background-color:#1b1b19 !important;border-color:#1b1b19 !important;}
+/* search + submit buttons (blue) -> ink */
+.search-submit,.wp-block-search__button,#searchsubmit,button.search-submit,.cm-search-form button,input[type=submit]{background-color:#1b1b19 !important;border-color:#1b1b19 !important;color:#efe9dd !important;}
+/* category badges/labels (green) -> rust */
+.cm-entry-header-meta a[href*="category"],.cat-links a,.cm-category a,a.cm-category,.cm-post-cat a{background-color:#be5028 !important;color:#fff !important;}
+
+/* (2) category menu: remove blue active box; hover + active = rust text, no box */
+#cm-primary-menu>li>a:hover,
+#cm-primary-menu>li.current-menu-item>a,
+#cm-primary-menu>li.current_page_item>a,
+#cm-primary-menu>li.current-menu-parent>a{background:transparent !important;color:#be5028 !important;}
+
