@@ -302,3 +302,19 @@ body.wp-theme-colormag{background-color:#c4bcb3 !important;}
 /* block search button (blue) -> ink */
 #secondary .wp-element-button,.wp-block-search__button,.wp-block-search button,#secondary button[type=submit]{background:#1b1b19 !important;color:#efe9dd !important;border-color:#1b1b19 !important;}
 
+/* ============================================================
+   FIX19 2026-07-10 — kill remaining blue at the source
+   ColorMag's blue accent is CSS variables (--cm-color-1/2 etc.).
+   Recolor them to ink so the active-menu box border and widget
+   underlines (and any other accent) become ink in one shot.
+   ============================================================ */
+:root,body,body.wp-theme-colormag,#page,.cm-header-builder{
+  --cm-color-1:#1b1b19 !important; --cm-color-2:#1b1b19 !important;
+  --wp--preset--color--cm-color-1:#1b1b19 !important; --wp--preset--color--cm-color-2:#1b1b19 !important;
+  --e-global-color-cmcolor1:#1b1b19 !important; --e-global-color-cmcolor2:#1b1b19 !important;
+}
+/* active menu item: drop the box entirely, keep the darker-greige highlight only */
+#cm-primary-menu>li.current-menu-item>a,
+#cm-primary-menu>li.current_page_item>a,
+#cm-primary-menu>li.current-menu-parent>a{border:0 !important;box-shadow:none !important;outline:0 !important;background:#b3aa9c !important;color:#1b1b19 !important;}
+
