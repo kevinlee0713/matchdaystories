@@ -6,3 +6,10 @@ tmp/
 *.log
 .secrets/
 ci_matchday*
+
+# large video sample media (regenerate with scripts/make-story-video.mjs)
+samples/video/*.mp4
+samples/video/scene*.png
+samples/video/cap*.png
+samples/video/f*.png
+samples/video/list.txt
